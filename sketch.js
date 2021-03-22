@@ -8,6 +8,9 @@ var plinkos = [];
 var divisions =[];
 var divisionHeight=300;
 var score =0;
+var gamestate ="start";
+var particle = null;
+var count = 0;
 function setup() {
   createCanvas(800, 800);
   engine = Engine.create();
@@ -53,8 +56,19 @@ function setup() {
 
 function draw() {
   background("black");
-  textSize(20)
- //text("Score : "+score,20,30);
+  textSize(35)
+  
+ text("Score : "+score,20,30);
+ text(" 500 ",5,550);
+ text(" 500 ",80,550);
+ text(" 500 ",160,550);
+ text(" 500 ",240,550);
+ text(" 100 ",320,550);
+ text(" 100 ",400,550);
+ text(" 100 ",480,550);
+ text(" 200 ",560,550);
+ text(" 200 ",640,550);
+ text(" 200 ",720,550);
   Engine.update(engine);
   ground.display();
   
@@ -63,17 +77,40 @@ function draw() {
      plinkos[i].display();
      
    }
-   if(frameCount%60===0){
-     particles.push(new Particle(random(width/2-30, width/2+30), 10,10));
-     score++;
-   }
- 
-  for (var j = 0; j < particles.length; j++) {
-   
-     particles[j].display();
-   }
+  if(gamestate == "end"){
+    textSize(100);
+    text("gmaeover",150,250)
+  }
    for (var k = 0; k < divisions.length; k++) {
      
      divisions[k].display();
    }
+   if(particle != null){
+     paricle.display();
+     if(particle.body.position.y>760){
+       if(particle.body.position.x<300){
+         score += 500;
+         particle = null;
+       }
+       else  if(particle.body.position.x>301 && particle.body.position.x<600){
+        score += 100;
+        particle = null;
+      }
+      else  if(particle.body.position.x>601 && particle.body.position.x<900){
+        score += 200;
+        particle = null;
+      }
+      if(count>=5){
+        gamestate = "end";
+      }
+     }
+     
+   }
+}
+function mouseDragged(){
+  if(gamestate !== "end"){
+    count++ ;
+    paricle = new Particle(mouseX,10,10);
+    }
+  
 }
